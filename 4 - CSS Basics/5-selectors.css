@@ -73,7 +73,7 @@ p:last-child {
 }
 
 p:nth-child(4) {
-  text-decoration: line-through solid purple 4px;
+  text-decoration: line-through solid orange 4px;
 }
 
 p:nth-child(2n) {
@@ -106,14 +106,15 @@ button:active {
   background-color: #1a7431;
 }
 
+/* Double Check */
 #sign-up:link {
   color: #2dc653;
-  text-decoration: underline dashed #10451d 2px;
+  text-decoration: underline dashed #bdb344 2px;
 }
 
 #sign-up:visited {
   color: #3e92cc;
-  text-decoration: dashed underline #13293d 2px;
+  text-decoration: dashed underline #0b7ce7 2px;
 }
 
 /* Attribute Selector */
