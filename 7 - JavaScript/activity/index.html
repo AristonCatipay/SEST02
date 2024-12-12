@@ -54,6 +54,51 @@
         <li>Call displayAvailableBooks again to see the updated list.</li>
       </ul>
     </ol>
-    <script src=""></script>
+    <script>
+      let library = [
+        {
+          title: "The Power of Habit",
+          author: "Charles Duhigg",
+          isAvailable: true,
+        },
+        { title: "The Alchemist", author: "Paulo Coelho", isAvailable: true },
+        {
+          title: "Rich Dad Poor Dad",
+          author: "Robert Kiyosaki",
+          isAvailable: true,
+        },
+      ];
+
+      function displayAvailableBooks() {
+        console.log("=== AVAILABLE BOOKS ===");
+        library.forEach((book) => {
+          if (book.isAvailable) {
+            console.log(`${book.title} by ${book.author}`);
+          }
+        });
+        console.log("=== END ===");
+      }
+
+      function borrowBook(title) {
+        const book = library.find((book) => book.title === title);
+        if (book) {
+          if (book.isAvailable) {
+            book.isAvailable = false;
+            console.log(`You have borrowed "${book.title}".`);
+          } else {
+            console.log(`"${book.title}" is currently borrowed.`);
+          }
+        } else {
+          console.log(`"${title}" not found in the library.`);
+        }
+      }
+
+      displayAvailableBooks();
+      borrowBook("Rich Dad Poor Dad");
+      borrowBook("Rich Dad Poor Dad");
+      borrowBook("The Alchemist");
+      borrowBook("It Ends With Us");
+      displayAvailableBooks();
+    </script>
   </body>
 </html>
