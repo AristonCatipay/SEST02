@@ -10,46 +10,38 @@
     <script>
       // Local Storage: store data locally within our browser.
 
+      // Function used to check if localStorage is supported.
+      function isLocalStorageSupported() {
+        return typeof localStorage !== undefined && localStorage !== null;
+      }
+
+      console.log(isLocalStorageSupported());
+
       // Create an object
-      const person = {
+      const user = {
         firstName: "John",
         lastName: "Doe",
         age: 30,
-        isMarried: true,
-        hobbies: ["Coding", "Hiking", "Sleeping"],
       };
-      console.log("User:", person);
-      console.log("Data Type:", typeof person);
+      console.log("User:", user);
+      console.log("Data Type:", typeof user);
 
-      const serializedObject = JSON.stringify(person);
-      console.log("Serialized Object:", serializedObject);
-      console.log("Data Type:", typeof serializedObject);
-
-      const number = [1, 2, 3, 4, 5];
-      const serializedNumber = JSON.stringify(number);
-      console.log("Serialized Array:", serializedNumber);
-      console.log("Data Type:", typeof serializedNumber);
+      const serializedValue = JSON.stringify(user);
+      console.log("Serialized Value:", serializedValue);
+      console.log("Data Type:", typeof serializedValue);
 
       // Add a key and value in the local storage
-      localStorage.setItem("person", serializedObject);
-      localStorage.setItem("number", serializedNumber);
+      localStorage.setItem("user", serializedValue);
 
       // Retrieve a key and value in localStorage
-      const personJSONString = localStorage.getItem("person");
-      console.log("String:", personJSONString);
-      const deserializedObject = JSON.parse(personJSONString);
-      console.log("Deserialized Object:", deserializedObject);
-      console.log("Data Type:", typeof deserializedObject);
-
-      const numberJSONString = localStorage.getItem("number");
-      console.log("String:", numberJSONString);
-      const deserializedArray = JSON.parse(numberJSONString);
-      console.log("Deserialized Array:", deserializedArray);
-      console.log("Data Type:", typeof deserializedArray);
+      const value = localStorage.getItem("user");
+      console.log("Local Storage User:", value);
+      const deserializedValue = JSON.parse(value);
+      console.log("Deserialized Value:", deserializedValue);
+      console.log("Data Type:", typeof deserializedValue);
 
       // Remove Data
-      localStorage.removeItem("person");
-      localStorage.removeItem("number");
+      localStorage.removeItem("user");
     </script>
   </body>
 </html>
