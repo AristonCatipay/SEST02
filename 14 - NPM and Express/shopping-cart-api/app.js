@@ -32,7 +32,7 @@ app.get("/products/:productID", (request, response) => {
 
     if (product){
         // If there is a match, return the product Object.
-        response.json(product)
+        response.status(200).json(product)
     } else {
         // Return an error and tell the user the product is not found.
         response.status(404).json({ message: "Product not found"})
