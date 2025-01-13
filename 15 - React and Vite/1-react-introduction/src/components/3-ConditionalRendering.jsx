@@ -9,7 +9,7 @@ function UsersList(){
     // ternary operator
     // condition ? true : false
     // if (condition) {} else {}
-    const isLoggedIn = true;
+    const isLoggedIn = false;
     const username = "John Doe";
     const loggedInElement = <em>{username}</em>;
 

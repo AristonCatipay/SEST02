@@ -9,6 +9,7 @@ function Increment(){
     // Destructuring the return value of useState hook
     const [count, setCount] = useState(0);
 
+
     const increment = () => {
         // This will still increment the count by 1
         // setCount(count + 1)
@@ -26,6 +27,23 @@ function Increment(){
         setCount((count) => count - 1)
     }
 
+
+    /*
+    // This approach will not trigger a re-render.
+    let count = 0;
+
+    const increment = () => {
+        // count = count + 1;
+        count += 1;
+        console.log(count)
+    }
+
+    const decrement = () => {
+        count -= 1;
+        console.log(count)
+    }
+    */
+ 
     return (
         <div>
             <p>Count: {count}</p>

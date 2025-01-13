@@ -4,7 +4,7 @@
 
 // PascalCasing naming convention
 // Each first letter of each word should be capital.
-function App(){
+function Component(){
     // Code goes here
     // JSX: Javascript XML
     // fragment: <></>
@@ -17,4 +17,4 @@ function App(){
     )
 }
 
-export default App;
+export default Component;
