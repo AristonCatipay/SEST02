@@ -18,10 +18,7 @@ function TodoList() {
 
   const addTodo = () => {
     if (inputValue.trim()) {
-        // const updatedTodos = todos.push(inputValue)
-        // setTodos(updatedTodos);
-        setTodos((todos) => todos.push(inputValue))
-        // setTodos([...todos, inputValue]);
+        setTodos([...todos, inputValue]);
         setInputValue("");
     }
   }
