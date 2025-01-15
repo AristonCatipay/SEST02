@@ -13,22 +13,20 @@
     margin-bottom: 20px;
 }
 
-.todo-list button.add-btn {
+.todo-list button{
     padding: 6px 14px;
-    background-color: #2a9d8f;
     color: #fdf0d5;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
+.todo-list button.add-btn {
+    background-color: #2a9d8f;
+}
+
 .todo-list button.delete-btn {
-    padding: 6px 14px;
     background-color: #c1121f;
-    color: #fdf0d5;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
 }
 
 .todo-list ul{

@@ -18,13 +18,14 @@ function TodoList() {
   const [inputValue, setInputValue] = useState("");
 
   const addTodo = () => {
-    if (inputValue.trim()) {
+    const cleanedInputValue = inputValue.trim()
+    if (cleanedInputValue) {
       // 1. Using push
       // todos.push(inputValue);
       // setTodos([...todos]);
 
       const newTodoObject = {
-        text: inputValue,
+        text: cleanedInputValue,
         completed: false,
       };
 
@@ -69,6 +70,7 @@ function TodoList() {
     });
     setTodos(updatedTodos)
   };
+  // New: [{completed: true, text: "Todo 1"}, {completed: true, text: "Todo 2"}]
 
   return (
     <div className="todo-list">
