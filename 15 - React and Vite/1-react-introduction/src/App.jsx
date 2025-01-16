@@ -1,4 +1,4 @@
-import Products from "./components/7-FetchApi";
+import Products from "./components/7-FetchAPI";
 
 function App() {
   return (
