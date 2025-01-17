@@ -1,11 +1,15 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
-import "bootstrap/dist/css/bootstrap.min.css";
-// Import Bootstrap CSS
 
+// Step 1: install bootstrap
+// npm i react-bootstrap bootstrap
+
+// Step 2: Import Bootstrap CSS
+import "bootstrap/dist/css/bootstrap.min.css";
+
+// Step 3: Import Bootstrap JavaScript (includes Popper.js)
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-// Import Bootstrap JavaScript (includes Popper.js)
 
 // Step 1: install react-router-dom
 // npm i react-router-dom
