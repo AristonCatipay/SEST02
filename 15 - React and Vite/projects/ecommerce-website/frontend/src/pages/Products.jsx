@@ -1,11 +1,18 @@
 import { useState, useEffect } from "react";
 
+// Bootstrap
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+import Alert from "react-bootstrap/Alert";
+
 function Products() {
   const [products, setProducts] = useState(null);
   const [loading, setLoading] = useState(true);
   const [newProductName, setNewProductName] = useState("");
   const [newProductPrice, setNewProductPrice] = useState(0);
   const [selectedProductId, setSelectedProductId] = useState(null);
+  const [showAlert, setShowAlert] = useState(null);
 
   useEffect(() => {
     // This side effect will only run the first time you mount this component.
@@ -28,6 +35,13 @@ function Products() {
     fetchData();
   }, []);
 
+  const handleShowAlert = (message, variant = "success") => {
+    setShowAlert({ message, variant });
+    setTimeout(() => {
+      setShowAlert(null);
+    }, 3000);
+  };
+
   const addNewProduct = async () => {
     try {
       const response = await fetch("http://localhost:3000/products", {
@@ -40,11 +54,11 @@ function Products() {
 
       if (response.ok) {
         // Update the data state variable
-        const responseData = await response.json();
-        console.log(responseData.message);
-        setProducts([...products, responseData.product]);
+        const deserializedData = await response.json();
+        setProducts([...products, deserializedData.product]);
         setNewProductName("");
         setNewProductPrice(0);
+        handleShowAlert(deserializedData.message);
       } else {
         throw new Error(`Network response was not ok: ${response.status}`);
       }
@@ -67,6 +81,9 @@ function Products() {
         // [{...}, {...}, {...}, {...}, {...}]
         // [{...}, {...}, {...}, {...}]
         // .filter(): create a new array with elements that passed the test condition.
+        const deserializedData = await response.json();
+        handleShowAlert(deserializedData.message, "warning");
+
         const updatedProducts = products.filter(
           (productObject) => productObject.id !== productID
         );
@@ -135,6 +152,7 @@ function Products() {
         setSelectedProductId(null);
         setNewProductName("");
         setNewProductPrice(0);
+        handleShowAlert(responseObject.message);
       } else {
         throw new Error(`Network response was not ok: ${response.status}`);
       }
@@ -149,72 +167,108 @@ function Products() {
     setNewProductPrice(0);
   };
 
+  const handleAddToCart = async (productId) => {
+    try {
+      const response = await fetch("http://localhost:3000/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productId: productId }),
+      });
+
+      if (response.ok) {
+        const deserializedData = await response.json();
+        handleShowAlert(deserializedData.message);
+      } else {
+        throw new Error(`Network response was not ok: ${response.status}`);
+      }
+    } catch (error) {
+      console.log("Error adding product to cart:", error);
+    }
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
 
-  // [{...}, {...}, {...}, {...}, {...}]
   return (
     <div>
+      {showAlert && (
+        <Alert variant={showAlert.variant}>{showAlert.message}</Alert>
+      )}
       <h1>Products Page</h1>
       <p>Welcome to the products page!</p>
       {products && (
-        <ul>
+        <div>
           {products.map((product) => (
-            <li key={product.id}>
-              {product.name}: ${product.price}
-              {/* Update Button */}
-              <button onClick={() => handleUpdateProduct(product.id)}>
-                Update
-              </button>
-              {/* Delete Button */}
-              <button onClick={() => handleDeleteProduct(product.id)}>
-                Delete
-              </button>
-            </li>
+            <Card key={product.id}>
+              <Card.Body>
+                <Card.Title>Product Name: {product.name}</Card.Title>
+                <Card.Text>Product Price: {product.price}</Card.Text>
+                <Button
+                  variant="warning"
+                  onClick={() => handleAddToCart(product.id)}
+                >
+                  Add to Cart
+                </Button>
+                <Button
+                  variant="success"
+                  onClick={() => handleUpdateProduct(product.id)}
+                >
+                  Update
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={() => handleDeleteProduct(product.id)}
+                >
+                  Delete
+                </Button>
+              </Card.Body>
+            </Card>
           ))}
-        </ul>
+        </div>
       )}
       {/* condition ? true : false */}
       <h2>{selectedProductId ? "Update Product" : "Add New Product"}</h2>
-      <form>
-        <div>
-          <label htmlFor="product-name">Name:</label>
-          <input
+      <Form>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Form.Label>Product Name</Form.Label>
+          <Form.Control
             type="text"
-            id="product-name"
+            placeholder="Product Name"
             value={newProductName}
             onChange={(event) => setNewProductName(event.target.value)}
           />
-        </div>
-        <div>
-          <label htmlFor="product-price">Price:</label>
-          <input
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+          <Form.Label>Product Price</Form.Label>
+          <Form.Control
             type="number"
-            id="product-price"
-            min="1"
             value={newProductPrice}
             onChange={(event) => {
               setNewProductPrice(Number(event.target.value));
             }}
+            min="1"
           />
-        </div>
+        </Form.Group>
+
         {/* condition ? true : false */}
         {selectedProductId ? (
           <>
-            <button type="button" onClick={updateProduct}>
+            <Button variant="primary" onClick={updateProduct}>
               Save Changes
-            </button>
-            <button type="button" onClick={handleCancelUpdate}>
+            </Button>
+            <Button variant="warning" onClick={handleCancelUpdate}>
               Cancel
-            </button>
+            </Button>
           </>
         ) : (
-          <button type="button" onClick={addNewProduct}>
+          <Button variant="success" onClick={addNewProduct}>
             Add Product
-          </button>
+          </Button>
         )}
-      </form>
+      </Form>
     </div>
   );
 }

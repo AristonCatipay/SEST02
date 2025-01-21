@@ -2,14 +2,20 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
+import Cart from "./pages/Cart";
 // import { Routes, Route, Link } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
+
+// Bootstrap
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 import Navigation from "./components/Navigation";
 
 function App() {
   return (
-    <div>
+    <Container>
       {/* <nav>
         <ul>
           <li>
@@ -26,15 +32,16 @@ function App() {
           </li>
         </ul>
       </nav> */}
-      <Navigation/>
+      <Navigation />
       <Routes>
-        <Route path="/" element={<Home/>}/>
-        <Route path="/about" element={<About/>}/>
-        <Route path="/contact" element={<Contact/>}/>
-        <Route path="/products" element={<Products/>}/>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
-    </div>
-  )
+    </Container>
+  );
 }
 
 export default App;
