@@ -8,6 +8,9 @@ const app = express();
 // Middleware
 app.use(express.json());
 
+// Routes
+app.use("/posts", require("./src/routes/post"));
+
 // Connect to the MongoDB Cluster
 mongoose
   .connect(process.env.MONGODB_URI)
