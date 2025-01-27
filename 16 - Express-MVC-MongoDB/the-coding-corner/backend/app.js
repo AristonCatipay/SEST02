@@ -10,6 +10,7 @@ app.use(express.json());
 
 // Routes
 app.use("/posts", require("./src/routes/post"));
+app.use("/users", require("./src/routes/user"));
 
 // Connect to the MongoDB Cluster
 mongoose
