@@ -10,15 +10,15 @@ const {
 const { authMiddleware } = require("../middleware/authMiddleware");
 
 // POST: Create a new Post
-// POST: http://localhost:3000/posts/
-router.post("/", authMiddleware, createPost);
-// GET: http://localhost:3000/posts/
-router.get("/", authMiddleware, getAllPosts);
-// GET: http://localhost:3000/posts/:id
-router.get("/:id", authMiddleware, getPost);
-// DELETE: http://localhost:3000/posts/:id
-router.delete("/:id", authMiddleware, deletePost);
-// PUT: http://localhost:3000/posts/:id
-router.put("/:id", authMiddleware, updatePost);
+// POST: http://localhost:3000/api/posts/
+router.post("/", createPost);
+// GET: http://localhost:3000/api/posts/
+router.get("/", getAllPosts);
+// GET: http://localhost:3000/api/posts/:id
+router.get("/:id", getPost);
+// DELETE: http://localhost:3000/api/posts/:id
+router.delete("/:id", deletePost);
+// PUT: http://localhost:3000/api/posts/:id
+router.put("/:id", updatePost);
 
 module.exports = router;

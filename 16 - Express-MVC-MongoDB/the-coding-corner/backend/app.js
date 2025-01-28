@@ -8,9 +8,17 @@ const app = express();
 // Middleware
 app.use(express.json());
 
+const corsOptions = {
+  origin: ["http://localhost:5173"],
+  methods: ["GET", "POST", "PATCH", "DELETE"],
+  allowedHeaders: ["Content-Type"],
+  exposedHeaders: ["Content-Type"],
+};
+app.use(cors(corsOptions));
+
 // Routes
-app.use("/posts", require("./src/routes/post"));
-app.use("/users", require("./src/routes/user"));
+app.use("/api/posts", require("./src/routes/post"));
+app.use("/api/users", require("./src/routes/user"));
 
 // Connect to the MongoDB Cluster
 mongoose
