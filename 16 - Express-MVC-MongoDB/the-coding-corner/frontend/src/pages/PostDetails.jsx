@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
@@ -13,32 +14,12 @@ function PostDetails() {
   const [userIsAuthor, setUserIsAuthor] = useState(true);
 
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
   const [showAlert, setShowAlert] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/api/posts/${id}`);
-
-        if (!response.ok) {
-          throw new Error(response.status);
-        }
-
-        const postDetails = await response.json();
-        setPost(postDetails);
-      } catch (error) {
-        console.error(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [id]);
 
   const handleShowAlert = (message, variant = "success") => {
     setShowAlert({ message, variant });
@@ -47,8 +28,48 @@ function PostDetails() {
     }, 3000);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("jwtToken");
+
+        if (!token) {
+          return navigate("/login");
+        }
+
+        const response = await fetch(`http://localhost:3000/api/posts/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const data = await response.json();
+          handleShowAlert(data.error || "Failed to retrieve post.", "danger");
+          throw new Error(`Failed: ${response.status}`);
+        }
+
+        const postDetails = await response.json();
+        setPost(postDetails);
+      } catch (error) {
+        console.error("Failed:", error.message);
+        handleShowAlert("An unexpected error occured.", "danger");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
   const handleUpdate = async () => {
     try {
+      const token = localStorage.getItem("jwtToken");
+
+      if (!token) {
+        return navigate("/login");
+      }
+
       const updatedPost = {
         title: title !== "" ? title : post.title,
         author: post.author,
@@ -59,34 +80,57 @@ function PostDetails() {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(updatedPost),
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to update post. Status: ${response.status}`);
+        const data = await response.json();
+        handleShowAlert(data.error || "Failed to update post.", "danger");
+        throw new Error(`Failed: ${response.status}`);
       }
 
-      const deserialized = await response.json();
-      handleShowAlert(deserialized.message);
+      const data = await response.json();
+      handleShowAlert(`${data.message} Redirecting...`);
+      setTimeout(() => {
+        navigate("/posts");
+      }, 3000);
     } catch (error) {
-      console.error("Update failed:", error.message);
+      console.error("Failed:", error.message);
+      handleShowAlert("An unexpected error occured.", "danger");
     }
   };
 
   const handleDelete = async () => {
     try {
+      const token = localStorage.getItem("jwtToken");
+
+      if (!token) {
+        return navigate("/login");
+      }
+
       const response = await fetch(`http://localhost:3000/api/posts/${id}`, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to delete post. Status: ${response.status}`);
+        const data = await response.json();
+        handleShowAlert(data.error || "Failed to delete post.", "danger");
+        throw new Error(`Failed: ${response.status}`);
       }
 
-      handleShowAlert("Post has been deleted.");
+      const data = await response.json();
+      handleShowAlert(`${data.message} Redirecting...`);
+      setTimeout(() => {
+        navigate("/posts");
+      }, 3000);
     } catch (error) {
-      console.error("Delete failed:", error.message);
+      console.error("Failed:", error.message);
+      handleShowAlert("An unexpected error occured.", "danger");
     }
   };
 

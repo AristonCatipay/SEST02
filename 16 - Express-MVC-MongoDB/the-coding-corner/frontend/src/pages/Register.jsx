@@ -1,14 +1,31 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Alert from "react-bootstrap/Alert";
 
 function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showAlert, setShowAlert] = useState(null);
+  const navigate = useNavigate();
+
+  const handleShowAlert = (message, variant = "success") => {
+    setShowAlert({ message, variant });
+    setTimeout(() => {
+      setShowAlert(null);
+    }, 3000);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setShowAlert(null);
+
+    if (!username || !password) {
+      handleShowAlert("Please fill in all fields", "warning");
+      return;
+    }
 
     try {
       const response = await fetch("http://localhost:3000/api/users/signup", {
@@ -18,17 +35,26 @@ function Register() {
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to register the user: ${response.status}`);
+        const data = await response.json();
+        handleShowAlert(data.error || "Registration failed.", "danger");
+        throw new Error(`Failed: ${response.status}`);
       }
 
-      console.log("Successful!");
+      handleShowAlert("Registration successful! Redirecting ...");
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
     } catch (error) {
-      console.error(error.message);
+      console.error("Failed:", error.message);
+      handleShowAlert("An unexpected error occured.", "danger");
     }
   };
 
   return (
     <>
+      {showAlert && (
+        <Alert variant={showAlert.variant}>{showAlert.message}</Alert>
+      )}
       <h1>Register Page</h1>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formBasicUsername">
